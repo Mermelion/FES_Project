@@ -22,12 +22,12 @@ class Dispositiu:
 
 # ---- DADES DE L'INVENTARI JSON ----
 
-    id: str                         # Identificador del dispositiu
-    nom: str                        # Nom descriptiu del dispositiu
-    tipus: str                      # Categoria del dispositiu (router, switch...)
-    ip: str                         # Adreça IPv4 assignada al dispositiu
+    id:       str                   # Identificador del dispositiu
+    nom:      str                   # Nom descriptiu del dispositiu
+    tipus:    str                   # Categoria del dispositiu (router, switch...)
+    ip:       str                   # Adreça IPv4 assignada al dispositiu
     ubicacio: str                   # Ubicació dins de l'edifici
-    id_pare: Optional[str] = None   # id del node del que depèn
+    id_pare:  Optional[str] = None  # id del node del que depèn
         # si id_pare és None, el dispositiu és un node arrel
         # Optiona[str] equival a str | None. = None indica que el valor per defecte és None
 
@@ -43,5 +43,16 @@ class Dispositiu:
         # Cada node tindrà la opció de fills. Serveix per guardar els nodes que depenen d'aquest. Si no en té, serà una llista buida.
         # List["Dispositiu"] indica que fills guarda una llista d'objectes de tipus Dispositiu. S'ha de posar entre cometes perquè encara no s'ha definit la classe Dispositiu
         # default_factory = list indica que el valor per defecte és una llista (buida). Si no es posa, tots els objectes compartirien la mateixa llista.
+
+# ----- RESULTATS DE L'ANÀLISI -----
+
+# Posarem tots els camps en None per defecte, ja que encara no s'han analitzat
+
+    disponibilitat:     Optional[float] = None  # % de pings respostos
+    perdues:            Optional[float] = None  # % de pings perduts
+    latencia_mitjana:   Optional[float] = None  # Latència mitjana (ms)
+    jitter:             Optional[float] = None  # Variació de la latència (ms)
+    estat:              Optional[str]   = None  # Estat del dispositiu (ÒPTIM, DEGRADAT O CAIGUT)
+    causa:              Optional[str]   = None  # Causa de l'estat del dispositiu (ARREL O COLATERAL)
 
 
