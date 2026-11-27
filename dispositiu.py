@@ -6,24 +6,42 @@
 # Els dispositius s'enllacen entre si (forman relacions pare-fill)
 # Aquests enllaços formen l'arbre de dependència
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Optional, List
 
 # **from dataclasses import dataclass** ens facilitarà la manera d'escriure el codi de la classe
 # Genera automàticament el __init__, fent que no s'hagi d'escriure self. per tots els elements
 
+# **from typing import Optional, List** Optional ens permetrà indicar que una variable pot ser del tipus indicat o None
+# List ens permetrà indicar que una variable és una llista de valors del tipus indicat
 
-@dataclass
+
+@dataclass  # Genera automàticament __init__ amb els atributs de la classe
 class Dispositiu:
     """Representació d'un node de la xarxa."""
 
 # ---- DADES DE L'INVENTARI JSON ----
-    id: str                     # Identificador del dispositiu
-    nom: str                    # Nom descriptiu del dispositiu
-    tipus: str                  # Categoria del dispositiu (router, switch...)
-    ip: str                     # Adreça IPv4 assignada al dispositiu
-    ubicacio: str               # Ubicació dins de l'edifici
-    id_pare: str | None = None  # id del node del que depèn
-                                # si id_pare és None, el dispositiu és un node arrel
-                                # = None és per oferir que l'argument sigui opcional
 
-    
+    id: str                         # Identificador del dispositiu
+    nom: str                        # Nom descriptiu del dispositiu
+    tipus: str                      # Categoria del dispositiu (router, switch...)
+    ip: str                         # Adreça IPv4 assignada al dispositiu
+    ubicacio: str                   # Ubicació dins de l'edifici
+    id_pare: Optional[str] = None   # id del node del que depèn
+        # si id_pare és None, el dispositiu és un node arrel
+        # Optiona[str] equival a str | None. = None indica que el valor per defecte és None
+
+# -------- ENLLAÇ A L'ARBRE --------
+
+    pare: Optional["Dispositiu"] = field(default = None, repr = False)
+        # Cada node tindrà la opció de pare. Serveix per indicar a quin node depèn. Si no en té, serà None.
+        # Optional["Dispositiu"] indica que pare guarda un objecte de tipus Dispositiu o None. S'ha de posar entre cometes perquè encara no s'ha definit la classe Dispositiu
+        # repr = False serveix per evitar bucles a la hora de mostrar l'objecte per pantalla.
+        # Si no es posa, quan es mostri un dispositiu, mostrarà el pare, i aquest tornarà a mostrar el fill, i així infinitament.
+
+    fills: List["Dispositiu"] = field(default_factory = list, repr = False)
+        # Cada node tindrà la opció de fills. Serveix per guardar els nodes que depenen d'aquest. Si no en té, serà una llista buida.
+        # List["Dispositiu"] indica que fills guarda una llista d'objectes de tipus Dispositiu. S'ha de posar entre cometes perquè encara no s'ha definit la classe Dispositiu
+        # default_factory = list indica que el valor per defecte és una llista (buida). Si no es posa, tots els objectes compartirien la mateixa llista.
+
+
